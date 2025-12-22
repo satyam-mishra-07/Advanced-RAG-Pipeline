@@ -102,6 +102,8 @@ def add_chunks_to_chroma(chunks: List[str]) -> None:
         ids=ids
     )
 
+    client.persist()
+
 def dense_retrieve(query: str, k: int = 10) -> List[str]:
     query_embedding = embed_query(query)
 
