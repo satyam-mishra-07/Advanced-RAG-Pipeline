@@ -1,0 +1,7 @@
+numpy
+requests
+python-dotenv
+sentence-transformers
+rank-bm25
+chromadb
+pypdf
