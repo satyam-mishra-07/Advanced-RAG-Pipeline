@@ -1,150 +1,182 @@
-1️⃣ Simple factual retrieval (baseline sanity checks)
+RAG Evaluation Query Set for Microsoft Annual Report
 
-These test whether your chunking + dense retrieval works at all.
+This document defines a structured set of evaluation queries designed to test and benchmark Retrieval-Augmented Generation (RAG) systems using Microsoft’s annual report as the source corpus. The queries are grouped by difficulty and failure mode to expose weaknesses in retrieval, chunking, reasoning, and hallucination control.
 
-“What was Microsoft’s total revenue in fiscal year 2023?”
+1. Simple Factual Retrieval (Baseline Sanity Checks)
 
-“Who is Microsoft’s CEO as mentioned in the report?”
 
-“What is Microsoft’s mission statement?”
 
-“How many employees did Microsoft have as of June 30, 2023?”
+These queries verify whether basic chunking and dense retrieval are functioning correctly.
 
-“Which stock exchange is Microsoft listed on?”
+What was Microsoft’s total revenue in fiscal year 2023?
 
-If these fail → your basic RAG is broken.
+Who is Microsoft’s CEO as mentioned in the report?
 
-2️⃣ Section-specific queries (tests chunking + metadata)
+What is Microsoft’s mission statement?
 
-These require the retriever to find the right section, not just similar words.
+How many employees did Microsoft have as of June 30, 2023?
 
-“What does Microsoft say about responsible AI?”
+Which stock exchange is Microsoft listed on?
 
-“What investments has Microsoft made in sustainability?”
 
-“What is Microsoft Fabric and where is it mentioned?”
+Failure on these queries indicates a fundamental issue with the RAG pipeline.
 
-“How does Microsoft describe its Intelligent Cloud segment?”
 
-“What is Microsoft’s approach to cybersecurity?”
+---
 
-These expose bad chunk boundaries very quickly.
+2. Section-Specific Queries (Chunking and Metadata Validation)
 
-3️⃣ Multi-sentence reasoning (naive RAG often fails here)
 
-These require combining information across paragraphs.
 
-“How does Microsoft describe the two breakthroughs defining the new era of AI?”
+These queries require retrieval from the correct document section rather than simple keyword similarity.
 
-“How is Microsoft integrating AI across productivity tools?”
+What does Microsoft say about responsible AI?
 
-“What role does Azure play in Microsoft’s AI strategy?”
+What investments has Microsoft made in sustainability?
 
-“How does Microsoft link AI to productivity gains?”
+What is Microsoft Fabric and where is it mentioned?
 
-Naive RAG usually retrieves half the answer.
+How does Microsoft describe its Intelligent Cloud segment?
 
-4️⃣ Comparison & decomposition queries (advanced RAG test)
+What is Microsoft’s approach to cybersecurity?
 
-These should fail badly without query decomposition.
 
-“Compare Microsoft’s AI strategy with its cloud strategy.”
+These queries quickly expose poor chunk boundaries or missing metadata.
 
-“How do GitHub Copilot and Microsoft 365 Copilot differ?”
 
-“What are the differences between Microsoft’s three operating segments?”
+---
 
-“Compare Microsoft’s commitments to sustainability and digital trust.”
+3. Multi-Sentence Reasoning Queries (Naive RAG Failure Cases)
 
-These are perfect for:
 
-query decomposition
 
-multi-retrieval
+These queries require combining information across multiple paragraphs.
 
-reranking
+How does Microsoft describe the two breakthroughs defining the new era of AI?
 
-5️⃣ Negative / trick queries (hallucination tests)
+How is Microsoft integrating AI across productivity tools?
 
-These check whether your system can say “not found”.
+What role does Azure play in Microsoft’s AI strategy?
 
-“What does the report say about Apple’s revenue?”
+How does Microsoft link AI to productivity gains?
 
-“Does the report mention Tesla?”
 
-“What is Microsoft’s plan for cryptocurrency mining?”
+Naive RAG systems typically retrieve incomplete context for these questions.
 
-“Does Microsoft discuss quantum computing revenue numbers?”
 
-If your system answers confidently → hallucination problem.
+---
 
-6️⃣ Numbers + table-based queries (hard mode)
+4. Comparison and Decomposition Queries (Advanced RAG Evaluation)
 
-These test whether your chunks include tables properly.
 
-“How much did Microsoft spend on share repurchases in 2023?”
 
-“What was the dividend per share declared in June 2023?”
+These queries generally require query decomposition and multiple retrieval steps.
 
-“How did Microsoft stock perform compared to the S&P 500 over five years?”
+Compare Microsoft’s AI strategy with its cloud strategy.
 
-“How much revenue did LinkedIn generate in fiscal year 2023?”
+How do GitHub Copilot and Microsoft 365 Copilot differ?
 
-These expose:
+What are the differences between Microsoft’s three operating segments?
 
-PDF extraction issues
+Compare Microsoft’s commitments to sustainability and digital trust.
 
-table chunking problems
 
-7️⃣ Strategy & narrative queries (semantic understanding)
+These queries benefit from multi-retrieval, reranking, and structured reasoning.
 
-These test semantic grounding, not keyword matching.
 
-“What does Microsoft mean by ‘Copilot as an everyday AI companion’?”
+---
 
-“How does Microsoft justify its long-term AI investments?”
+5. Negative and Trick Queries (Hallucination Detection)
 
-“What risks does Microsoft associate with AI, and how does it address them?”
 
-“How does Microsoft connect AI to social responsibility?”
 
-BM25 alone will struggle here.
+These queries test whether the system can correctly respond when information is absent.
 
-8️⃣ Queries you SHOULD save for advanced RAG only
+What does the report say about Apple’s revenue?
 
-Do not expect naive RAG to answer these well.
+Does the report mention Tesla?
 
-“Summarize Microsoft’s AI vision in 5 bullet points.”
+What is Microsoft’s plan for cryptocurrency mining?
 
-“What are Microsoft’s top priorities for the next platform shift?”
+Does Microsoft discuss quantum computing revenue numbers?
 
-“How does Microsoft plan to balance AI innovation and regulation?”
 
-“What evidence does Microsoft provide that AI is already improving productivity?”
+Confident answers to these queries indicate hallucination issues.
 
-These require:
 
-reranking
+---
 
-context compression
+6. Numerical and Table-Based Queries (Hard Mode)
 
-good prompt constraints
 
-9️⃣ Gold-standard evaluation queries (use these repeatedly)
 
-These are perfect for regression testing.
+These queries depend on correct extraction and chunking of tables and numerical data.
 
-“What are Microsoft’s three commitments for building AI responsibly?”
+How much did Microsoft spend on share repurchases in 2023?
 
-“How does Microsoft define the new era of AI?”
+What was the dividend per share declared in June 2023?
 
-“What role does natural language play in Microsoft’s AI vision?”
+How did Microsoft stock perform compared to the S&P 500 over five years?
 
-If answers improve after adding:
+How much revenue did LinkedIn generate in fiscal year 2023?
 
-reranker
 
-better chunking
+These queries expose PDF parsing errors and table-handling limitations.
 
-hybrid retrieval
-you’re doing things right.
+
+---
+
+7. Strategy and Narrative Queries (Semantic Understanding)
+
+
+
+These queries evaluate semantic grounding beyond keyword matching.
+
+What does Microsoft mean by “Copilot as an everyday AI companion”?
+
+How does Microsoft justify its long-term AI investments?
+
+What risks does Microsoft associate with AI, and how does it address them?
+
+How does Microsoft connect AI to social responsibility?
+
+
+Lexical retrieval methods alone typically perform poorly on these queries.
+
+
+---
+
+8. Queries Reserved for Advanced RAG Systems
+
+
+
+These queries should not be expected to perform well under naive RAG setups.
+
+Summarize Microsoft’s AI vision in five bullet points.
+
+What are Microsoft’s top priorities for the next platform shift?
+
+How does Microsoft plan to balance AI innovation and regulation?
+
+What evidence does Microsoft provide that AI is already improving productivity?
+
+
+These queries require reranking, context compression, and strong prompt constraints.
+
+
+---
+
+9. Gold-Standard Evaluation Queries (Regression Testing)
+
+
+
+These queries are suitable for repeated evaluation after system improvements.
+
+What are Microsoft’s three commitments for building AI responsibly?
+
+How does Microsoft define the new era of AI?
+
+What role does natural language play in Microsoft’s AI vision?
+
+
+Improved performance on these queries after enhancements such as reranking, better chunking, or hybrid retrieval indicates meaningful system progress.
